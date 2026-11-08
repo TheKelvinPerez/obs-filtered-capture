@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="840" height="1110" viewBox="0 0 840 1110" role="img" aria-labelledby="title description">
+  <title id="title">Filtered Capture architecture</title>
+  <desc id="description">Display and excluded app identifiers enter Apple's ScreenCaptureKit application filter. A dedicated serial callback receives frames. A latest-frame slot retains the IOSurface. OBS imports the surface as a GPU texture and passes it through the existing scene and encoder. Configuration changes and app lifecycle events refresh capture separately.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="7" refY="5" orient="auto"><path d="M1 1 7 5 1 9" fill="none" stroke="#7edbb3" stroke-width="1.8"/></marker>
+    <style>
+      text{font-family:ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+      .label{font-size:27px;font-weight:650;fill:#f3f0e8}
+      .detail{font-size:21px;fill:#b6c3bd}
+      .number{font-size:19px;fill:#7edbb3;font-weight:650}
+      .node{fill:#202b28;stroke:#40534a;stroke-width:1.5}
+      .flow{stroke:#7edbb3;stroke-width:2;fill:none;marker-end:url(#arrow)}
+    </style>
+  </defs>
+  <rect width="840" height="1110" rx="24" fill="#151d1a"/>
+  <text x="48" y="57" font-size="18" font-weight="650" letter-spacing="2" fill="#7edbb3">THE CAPTURE PATH</text>
+  <text x="48" y="104" font-size="37" font-weight="650" fill="#f3f0e8">One capture. Direct to OBS.</text>
+  <text x="48" y="141" class="detail">No intermediate sharing window or preview-image conversion.</text>
+
+  <g transform="translate(48 180)">
+    <rect width="744" height="108" rx="14" class="node"/>
+    <text x="24" y="42" class="number">01</text>
+    <text x="80" y="43" class="label">Display + app exclusion IDs</text>
+    <text x="80" y="77" class="detail">Choose a monitor and exact application bundle identifiers.</text>
+  </g>
+  <path d="M420 289V319" class="flow"/>
+  <g transform="translate(48 330)">
+    <rect width="744" height="108" rx="14" fill="#243b31" stroke="#7edbb3" stroke-width="1.5"/>
+    <text x="24" y="42" class="number">02</text>
+    <text x="80" y="43" class="label">ScreenCaptureKit application filter</text>
+    <text x="80" y="77" class="detail">macOS excludes selected apps from this capture stream.</text>
+  </g>
+  <path d="M420 439V469" class="flow"/>
+  <g transform="translate(48 480)">
+    <rect width="744" height="108" rx="14" class="node"/>
+    <text x="24" y="42" class="number">03</text>
+    <text x="80" y="43" class="label">Dedicated serial frame callback</text>
+    <text x="80" y="77" class="detail">Receive complete frames away from the main UI queue.</text>
+  </g>
+  <path d="M420 589V619" class="flow"/>
+  <g transform="translate(48 630)">
+    <rect width="744" height="108" rx="14" class="node"/>
+    <text x="24" y="42" class="number">04</text>
+    <text x="80" y="43" class="label">Latest IOSurface frame</text>
+    <text x="80" y="77" class="detail">Replace pending frames instead of building a backlog.</text>
+  </g>
+  <path d="M420 739V769" class="flow"/>
+  <g transform="translate(48 780)">
+    <rect width="744" height="108" rx="14" class="node"/>
+    <text x="24" y="42" class="number">05</text>
+    <text x="80" y="43" class="label">OBS GPU texture import</text>
+    <text x="80" y="77" class="detail">Bind the shared surface, then use the existing scene + encoder.</text>
+  </g>
+  <path d="M48 932H792" stroke="#40534a"/>
+  <text x="48" y="973" font-size="22" font-weight="650" fill="#f3f0e8">Separate control path</text>
+  <text x="48" y="1010" class="detail">Settings, app lifecycle, wake and display changes refresh capture.</text>
+  <text x="48" y="1045" class="detail">The source blanks during a refresh and stops when hidden.</text>
+  <text x="48" y="1080" font-size="18" fill="#92a59b">Capture requests the OBS frame rate. Measured performance varies by setup.</text>
+</svg>

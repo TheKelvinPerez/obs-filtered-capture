@@ -1,10 +1,21 @@
-# OBS Filtered Capture
+<p align="center">
+  <img src="docs/assets/header.png" alt="Illustration of a desktop passing through a selective filter, leaving private windows out of the captured view" width="100%">
+</p>
+
+# Filtered Capture
 
 **Capture your Mac desktop in OBS while hiding selected applications.**
 
-Keep a teleprompter, notes or chat visible to you while excluding them from your OBS display source. Frames go directly from Apple's ScreenCaptureKit into OBS through shared GPU surfaces. No intermediate sharing window is required.
+An independent, open-source plugin for OBS Studio. Keep a teleprompter, notes or chat visible to you while excluding them from your OBS display source. Frames go directly from Apple's ScreenCaptureKit into OBS through shared GPU surfaces. No intermediate sharing window is required.
 
 [Download the beta](https://github.com/TheKelvinPerez/obs-filtered-capture/releases/tag/v0.1.0-beta.1) · [Report a bug](https://github.com/TheKelvinPerez/obs-filtered-capture/issues)
+
+## At a glance
+
+- Hide selected apps while capturing the rest of your desktop.
+- Feed shared GPU surfaces directly into OBS, without a second capture window.
+- Follow your OBS frame rate, with optional capture resolution limits.
+- Keep your existing scene effects and audio setup.
 
 ## Compatibility
 
@@ -50,21 +61,16 @@ Application relaunch detection and filter refresh are asynchronous. **This beta 
 
 ## Architecture
 
-```text
-Display + app exclusion IDs
-            ↓
-ScreenCaptureKit application filter
-            ↓
-Dedicated serial frame callback
-            ↓
-Latest retained IOSurface frame
-            ↓
-OBS GPU texture import → scene → encoder
-```
+![Architecture diagram showing ScreenCaptureKit app filtering, a dedicated frame callback, the latest IOSurface frame, and direct OBS GPU texture import](docs/assets/architecture.svg)
+
+[Open the full-size diagram](docs/assets/architecture.svg)
 
 The latest frame replaces old pending frames instead of growing a queue. OBS reuses texture bindings when dimensions match. Capture avoids preview image conversion and recapturing another app's window. Configuration work runs separately from frame delivery. Numeric latency and throughput claims still require measurements.
 
 ## Troubleshooting
+
+<details>
+<summary>Blank source, missing plugin, choppy video, logs, or rollback</summary>
 
 **Blank source:** choose a display, check OBS screen recording permission in System Settings → Privacy & Security, and restart capture. Reopen OBS after permission changes. Stream failures leave the source blank.
 
@@ -75,6 +81,8 @@ The latest frame replaces old pending frames instead of growing a queue. OBS reu
 **Logs:** look for `[filtered-capture]`. Share only relevant lines with private paths and content removed.
 
 **Uninstall or roll back:** quit OBS and move the plugin out of the plugins directory. Restore an older bundle from OBS's backups directory if available. Scenes using a removed source report it missing until restored or removed.
+
+</details>
 
 ## Build from source
 
